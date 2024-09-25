@@ -49,13 +49,13 @@ class ProductAPIView(APIView):
         data = request.data
         serializer = ProductSerializer(data = data)
         if not serializer.is_valid():
-            return Response({"message":serializer.errors}, status=400)
+            return Response({"message":serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
         product = serializer.save()
         cache_key = f'product_{product.id}'
         cache.delete(cache_key)
 
-        return Response({"message": "Successfully Product created","data":serializer.data}, status=201)
+        return Response({"message": "Successfully Product created","data":serializer.data}, status=status.HTTP_201_CREATED)
 
     def put(self,request, product_id=None):
         if not product_id:
@@ -65,7 +65,7 @@ class ProductAPIView(APIView):
         oProduct = ProductModel.objects.get(id = product_id)
         serializer = ProductSerializer(oProduct,data = data, partial = True)
         if not serializer.is_valid():
-            return Response({"message":serializer.errors}, status=400)
+            return Response({"message":serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
         product = serializer.save()
         cache_key = f'product_{product.id}'
@@ -87,6 +87,7 @@ class ProductAPIView(APIView):
         return Response({"message": "Product deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
 
 class InventoryAPIView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request, item_id = None):
         if not item_id:
             return Response({"error": "Item ID is required for getting."}, status=status.HTTP_400_BAD_REQUEST)
