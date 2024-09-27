@@ -43,3 +43,6 @@ PUT /items/{item_id}/{action}
 
 Delete Inventory:
 DELETE /items/{item_id}
+
+Explanation Video Link:
+https://drive.google.com/file/d/1O-sCSLxeOQLdsfwAO5WXDhvqnMCHMela/view?usp=sharing
